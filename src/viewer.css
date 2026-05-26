@@ -4,6 +4,8 @@ body {
   font-family: sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #27292c;
+  color: #d7dad8;
 }
 
 .prop {
@@ -15,49 +17,95 @@ body {
 }
 
 .bool {
-  color: blue;
+  color: #d43c25;
 }
 
 .num {
-  color: blue;
+  color: #236dd7;
 }
 
 .string {
-  color: green;
+  color: #78a62d;
   white-space: pre-wrap;
 }
 
 .collapser {
   position: absolute;
-  left: -1em;
-  top: -0.2em;
+  left: -1.2em;
+  top: 0;
   cursor: pointer;
-  transform: rotate(90deg);
-  transition: transform 0.2s;
+  width: 1em;
+  height: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  transition: background-color 0.2s;
 }
 
-.collapser:before {
-  content: "▸";
-  user-select: none;
+.collapser:hover {
+  background-color: rgba(128, 128, 128, 0.2);
+}
+
+/* Expanded state: centered horizontal line (-) */
+.collapser::before {
+  content: "";
+  display: block;
+  width: 0.6em;
+  height: 2px;
+  background-color: currentColor;
+  border-radius: 1px;
+}
+
+/* Collapsed state: centered plus sign (+) */
+.collapser.collapsed::before {
+  height: 0;
+  width: 0;
+  background: none;
+}
+
+.collapser.collapsed::after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 0.6em;
+  height: 2px;
+  background-color: currentColor;
+  border-radius: 1px;
+}
+
+.collapser.collapsed::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 2px;
+  height: 0.6em;
+  background-color: currentColor;
+  border-radius: 1px;
 }
 
 .collapsible.collapsed {
   height: 1.2em;
   height: 1lh;
-  width: 1em;
+  width: auto;
   display: inline-block;
   overflow: hidden;
   vertical-align: top;
   margin: 0;
 }
-.collapsible.collapsed:before {
-  content: "…";
-  width: 1em;
-  margin-left: 0.2em;
+
+.collapsible.collapsed>li {
+  display: none;
+}
+
+.collapsible.collapsed::after {
+  content: " ... ";
+  color: #888;
+  font-style: italic;
 }
 
 .collapser.collapsed {
-  transform: rotate(0deg);
+  /* plus sign style handled by ::before and ::after above */
 }
 
 .q {
@@ -101,7 +149,7 @@ li {
 
 #json {
   font-family: monospace;
-  font-size: 1.1em;
+  font-size: 1.2em;
   white-space: pre-wrap;
   margin: 0.5em;
 }
@@ -112,75 +160,41 @@ ul {
   padding: 0;
 }
 
+ul.array>li,
+ul.obj>li {
+  position: relative;
+}
+
+.tree-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed #ccc;
+  pointer-events: none;
+}
+
+ul.array>li:last-child>.tree-line,
+ul.obj>li:last-child>.tree-line {
+  display: none;
+}
+
+ul.collapsed>li>.tree-line {
+  display: none;
+}
+
 h1 {
   font-size: 1.2em;
 }
 
 /* Indent JSON when there's a callback. */
-.callback + #json {
+.callback+#json {
   padding-left: 1em;
 }
 
 .callback {
   font-family: monospace;
   color: #a52a2a;
-}
-
-/* Tomorrow Night theme */
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #27292c;
-    color: #d7dad8;
-  }
-
-  a {
-    color: #4c9edd;
-  }
-  a:visited {
-    color: #b678c7;
-  }
-
-  .bool {
-    color: #92b2ca;
-  }
-
-  .num {
-    color: #92b2ca;
-  }
-
-  .null {
-    color: #d77c78;
-  }
-
-  .callback {
-    color: #d77c78;
-  }
-
-  .string {
-    color: #c2c77b;
-  }
-
-  #error {
-    border-bottom: 1px solid rgb(61, 61, 61);
-    background-color: rgb(37, 37, 37);
-    margin-bottom: 1.5em;
-    padding: 1em 0.5em;
-  }
-
-  .errormessage {
-    font-family: monospace;
-    margin-top: 0.5em;
-    color: rgb(212, 10, 10);
-  }
-
-  .errorcolumn {
-    background-color: rgb(212, 10, 10);
-    color: white;
-  }
-
-  .errorline {
-    background-color: rgb(32, 29, 29);
-  }
 }
 
 .spacer {

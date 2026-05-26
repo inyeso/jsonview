@@ -110,10 +110,13 @@ function arrayToHTML(json: any[], path: string, indent: number) {
     return "[ ]";
   }
 
+  const leftOffset = indent === 0 ? 0 : -2;
+  const treeLine = `<span class="tree-line" style="left: ${leftOffset}em;"></span>`;
+
   let output = "";
   for (let i = 0; i < json.length; i++) {
     const subPath = `${path}[${i}]`;
-    output += "<li>" + addIndent(indent + 1) + valueToHTML(json[i], subPath, indent + 1);
+    output += `<li>${treeLine}${addIndent(indent + 1)}${valueToHTML(json[i], subPath, indent + 1)}`;
     if (i < json.length - 1) {
       output += ",";
     }
@@ -136,6 +139,9 @@ function objectToHTML(json: Record<string, unknown>, path: string, indent: numbe
     return "{ }";
   }
 
+  const leftOffset = indent === 0 ? 0 : -2;
+  const treeLine = `<span class="tree-line" style="left: ${leftOffset}em;"></span>`;
+
   let output = "";
   for (const prop in json) {
     let subPath = "";
@@ -146,7 +152,7 @@ function objectToHTML(json: Record<string, unknown>, path: string, indent: numbe
     } else {
       escapedProp = `"${escapedProp}"`;
     }
-    output += `<li>${addIndent(indent + 1)}<span class="prop${
+    output += `<li>${treeLine}${addIndent(indent + 1)}<span class="prop${
       bare ? "" : " quoted"
     }" title="${htmlEncode(subPath)}"><span class="q">&quot;</span>${jsString(
       prop,
