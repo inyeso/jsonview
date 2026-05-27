@@ -1,32 +1,59 @@
 @charset "UTF-8";
 
+:root {
+  --jsonview-bg-color: #27292c;
+  --jsonview-text-color: #d7dad8;
+  --jsonview-string-color: #78a62d;
+  --jsonview-number-color: #e1db2d;
+  --jsonview-boolean-color: #f3573f;
+  --jsonview-null-color: #a52a2a;
+  --jsonview-key-color: #d7dad8;
+  --jsonview-link-color: #31a7e3;
+  --jsonview-line-color: #646464;
+  --jsonview-line-style: dashed;
+  --jsonview-line-enabled: block;
+  --jsonview-key-bold: bold;
+  --jsonview-value-bold: normal;
+  --jsonview-font-size: 1.2em;
+  --jsonview-indent-size: 2em;
+  --jsonview-hover-bg: #3a3d41;
+}
+
 body {
   font-family: sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #27292c;
-  color: #d7dad8;
+  background-color: var(--jsonview-bg-color);
+  color: var(--jsonview-text-color);
 }
 
 .prop {
-  font-weight: bold;
+  font-weight: var(--jsonview-key-bold);
+  color: var(--jsonview-key-color);
 }
 
 .null {
-  color: #a52a2a;
+  color: var(--jsonview-null-color);
 }
 
 .bool {
-  color: #d43c25;
+  color: var(--jsonview-boolean-color);
 }
 
 .num {
-  color: #236dd7;
+  color: var(--jsonview-number-color);
 }
 
 .string {
-  color: #78a62d;
+  color: var(--jsonview-string-color);
   white-space: pre-wrap;
+}
+
+#json .null,
+#json .bool,
+#json .num,
+#json .string {
+  font-weight: var(--jsonview-value-bold);
 }
 
 .collapser {
@@ -47,7 +74,6 @@ body {
   background-color: rgba(128, 128, 128, 0.2);
 }
 
-/* Expanded state: centered horizontal line (-) */
 .collapser::before {
   content: "";
   display: block;
@@ -57,7 +83,6 @@ body {
   border-radius: 1px;
 }
 
-/* Collapsed state: centered plus sign (+) */
 .collapser.collapsed::before {
   height: 0;
   width: 0;
@@ -104,9 +129,7 @@ body {
   font-style: italic;
 }
 
-.collapser.collapsed {
-  /* plus sign style handled by ::before and ::after above */
-}
+.collapser.collapsed {}
 
 .q {
   display: inline-block;
@@ -123,6 +146,14 @@ body {
 
 li {
   position: relative;
+}
+
+li.hover-highlight {
+  background-color: var(--jsonview-hover-bg);
+}
+
+li.hover-highlight>.collapser {
+  background-color: var(--jsonview-hover-bg);
 }
 
 #error {
@@ -149,14 +180,14 @@ li {
 
 #json {
   font-family: monospace;
-  font-size: 1.2em;
+  font-size: var(--jsonview-font-size);
   white-space: pre-wrap;
   margin: 0.5em;
 }
 
 ul {
   list-style: none;
-  margin: 0 0 0 2em;
+  margin: 0 0 0 var(--jsonview-indent-size);
   padding: 0;
 }
 
@@ -169,12 +200,13 @@ ul.array::before,
 ul.obj::before {
   content: "";
   position: absolute;
-  left: -2em;
+  left: calc(-1 * var(--jsonview-indent-size));
   top: 0.6em;
   bottom: 0.6em;
   width: 0;
-  border-left: 1px dashed #646464;
+  border-left: 1px var(--jsonview-line-style) var(--jsonview-line-color);
   pointer-events: none;
+  display: var(--jsonview-line-enabled);
 }
 
 #json>ul::before {
@@ -189,7 +221,6 @@ h1 {
   font-size: 1.2em;
 }
 
-/* Indent JSON when there's a callback. */
 .callback+#json {
   padding-left: 1em;
 }
@@ -204,13 +235,60 @@ h1 {
   width: 0px;
 }
 
-/* Allow long URLs to break */
 .string,
 :any-link {
   word-break: break-all;
 }
 
-/* Prevent double-highlighting of spacers */
+:any-link {
+  color: var(--jsonview-link-color);
+}
+
+:any-link:hover {
+  color: var(--jsonview-link-color);
+  text-decoration: underline;
+}
+
 :is(.spacer, :not(.quoted) > .q)::selection {
   background-color: transparent;
+}
+
+.context-menu {
+  position: fixed;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 4px 0;
+  min-width: 160px;
+  z-index: 1000;
+  font-family: sans-serif;
+  font-size: 13px;
+}
+
+.context-menu-item {
+  padding: 6px 16px;
+  cursor: pointer;
+  color: #333;
+  white-space: nowrap;
+}
+
+.context-menu-item:hover {
+  background-color: #f0f0f0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .context-menu {
+    background-color: #2d2d2d;
+    border-color: #555;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .context-menu-item {
+    color: #d7dad8;
+  }
+
+  .context-menu-item:hover {
+    background-color: #3d3d3d;
+  }
 }

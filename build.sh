@@ -12,7 +12,9 @@ mkdir -p build-chrome
 
 rollup ts-out/background-chrome.js --format es --name 'background' --file build-chrome/background.js
 rollup ts-out/content.js --format es --name 'content' --file build-chrome/content.js
+rollup ts-out/popup.js --format iife --name 'popup' --file build-chrome/popup.js
 cp src/viewer.css build-chrome/viewer.css
+cp src/popup.html build-chrome/popup.html
 cp src/manifest.chrome.json build-chrome/manifest.json
 cp license.txt build-chrome/license.txt
 cp -r src/_locales build-chrome
@@ -30,7 +32,9 @@ mkdir -p build-firefox
 
 rollup ts-out/background-firefox.js --format es --name 'background' --file build-firefox/background.js
 rollup ts-out/content.js --format es --name 'content' --file build-firefox/content.js
+rollup ts-out/popup.js --format iife --name 'popup' --file build-firefox/popup.js
 cp src/viewer.css build-firefox/viewer.css
+cp src/popup.html build-firefox/popup.html
 cp src/manifest.firefox.json build-firefox/manifest.json
 cp license.txt build-firefox/license.txt
 cp -r src/_locales build-firefox
