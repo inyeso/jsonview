@@ -122,18 +122,21 @@ function setupStorageListener() {
   } catch {}
 }
 
-/**
- * This script runs on every page. It communicates with the background script
- * to help decide whether to treat the contents of the page as JSON.
- */
-chrome.runtime.sendMessage("jsonview-is-json", (response: boolean) => {
-  if (chrome.runtime.lastError) {
-    return;
-  }
-  if (!response) {
-    return;
-  }
+function hideContent() {
+  const style = document.createElement("style");
+  style.id = "jsonview-hide-content";
+  style.textContent = "html { visibility: hidden !important; }";
+  (document.head || document.documentElement).appendChild(style);
+}
 
+function showContent() {
+  const style = document.getElementById("jsonview-hide-content");
+  if (style) {
+    style.remove();
+  }
+}
+
+function processJSON() {
   // At least in chrome, the JSON is wrapped in a pre tag.
   const jsonElems = document.getElementsByTagName("pre");
   let content: string | null = null;
@@ -166,4 +169,29 @@ chrome.runtime.sendMessage("jsonview-is-json", (response: boolean) => {
   loadAndApplySettings();
   setupStorageListener();
   installCollapseEventListeners();
+}
+
+/**
+ * This script runs on every page. It communicates with the background script
+ * to help decide whether to treat the contents of the page as JSON.
+ */
+hideContent();
+
+chrome.runtime.sendMessage("jsonview-is-json", (response: boolean) => {
+  if (chrome.runtime.lastError) {
+    showContent();
+    return;
+  }
+  if (!response) {
+    showContent();
+    return;
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      processJSON();
+    });
+  } else {
+    processJSON();
+  }
 });
