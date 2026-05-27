@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "JSONView",
+  "name": "JSONView2",
   "version": "3.2.0",
   "description": "__MSG_extensionDescription__",
   "author": "Benjamin Hollis",
@@ -14,7 +14,7 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "jsonview@brh.numbera.com"
+      "id": "jsonview2@brh.numbera.com"
     }
   },
   "background": {
