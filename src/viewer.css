@@ -160,26 +160,28 @@ ul {
   padding: 0;
 }
 
-ul.array>li,
-ul.obj>li {
+ul.array,
+ul.obj {
   position: relative;
 }
 
-.tree-line {
+ul.array::before,
+ul.obj::before {
+  content: "";
   position: absolute;
-  top: 0;
-  bottom: 0;
+  left: -2em;
+  top: 0.6em;
+  bottom: 0.6em;
   width: 0;
-  border-left: 1px dashed #ccc;
+  border-left: 1px dashed #646464;
   pointer-events: none;
 }
 
-ul.array>li:last-child>.tree-line,
-ul.obj>li:last-child>.tree-line {
+#json>ul::before {
   display: none;
 }
 
-ul.collapsed>li>.tree-line {
+ul.collapsed::before {
   display: none;
 }
 
